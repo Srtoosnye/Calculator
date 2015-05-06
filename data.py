@@ -1,31 +1,35 @@
 __author__ = 'srtoosnye'
 import MySQLdb
-import random
 
 
-def link_to_database():
-    db = MySQLdb.connect(host='localhost',
-                         user='root',
-                         passwd='123456',
-                         db='calculator')
-    return db
+def link_to_mysql():
+    return MySQLdb.connect(host='localhost', user='root', passwd='123456', db='calculator')
 
 
-def choose_expr(cursor):
-    sql = 'SELECT COUNT(*) FROM expression'
-    cursor.execute(sql)
-    c = cursor.fetchone()[0]
-    return random.randint(1, c)
+def create_table(cursor):
+    try:
+        cursor.execute("CREATE TABLE expression(equation char(30) PRIMARY KEY, result int(10))")
+        cursor.execute("INSERT INTO expression(equation, result) VALUES('1*2+3', 5)")
+        cursor.execute("INSERT INTO expression(equation, result) VALUES('1+2+3', 6)")
+        cursor.execute("INSERT INTO expression(equation, result) VALUES('1+2*3', 7)")
+        print 'New table is created..'
+    except:
+        print 'Table exists..'
 
 
-def get_expr(cursor, num):
-    sql = "SELECT equation FROM expression WHERE id = '%s'" % num
-    cursor.execute(sql)
-    expr = cursor.fetchone()[0]
-    print expr, '=',
-    return expr
+def is_used_data(cursor, expr):
+    cursor.execute("SELECT result FROM expression WHERE equation = '%s'" % expr)
+    try:
+        temp = cursor.fetchone()[0]
+        print 'Data exists..'
+        print temp
+        return 1
+    except:
+        cursor.execute("INSERT INTO expression(equation) VALUES('%s')" % expr)
+        print 'New data is created..'
+        return 0
 
 
-def store_result(cursor, result, num):
-    sql = "UPDATE expression SET result = '%s' WHERE id = '%s'" % (result, num)
+def store_result(cursor, result, expr):
+    sql = "UPDATE expression SET result = '%s' WHERE equation = '%s'" % (result, expr)
     cursor.execute(sql)

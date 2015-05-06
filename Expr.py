@@ -4,8 +4,8 @@ import sys
 
 
 class Expr(object):
-    def __init__(self):
-        self.__value = raw_input('请输入表达式：')
+    def __init__(self, s):
+        self.__value = s
         self.__opt = []
         self.__num = []
 

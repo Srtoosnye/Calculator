@@ -24,3 +24,4 @@ def calculate(postfix):
             temp = int(postfix[i])
         container.append(temp)
     print container[0]
+    return container[0]
