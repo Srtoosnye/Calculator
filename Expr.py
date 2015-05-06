@@ -90,6 +90,8 @@ class Expr(object):
                             while self.__opt[len(self.__opt)-1] != '(':
                                 self.__num.append(self.__opt.pop())
                             self.__opt.pop()
+                        while (len(self.__opt) > 0) and (not greater(c, self.__opt[len(self.__opt)-1])):
+                            self.__num.append(self.__opt.pop())
                     self.__opt.append(c)
                 else:
                     if (not self.__opt) or self.__opt[len(self.__opt)-1] == '(':
